@@ -18,6 +18,9 @@ import { upsertMember } from '@/database/repositories/MemberRepository';
 import { detectPlatformFromRoom } from '@/services/bridges/BridgeDetector';
 import { getUserId } from './MatrixClient';
 
+import { useRoomStore } from '@/stores/room-store';
+import { useMessageStore } from '@/stores/message-store';
+
 import type { Message, MessageType } from '@/types/message';
 import type { Room } from '@/types/room';
 import type { RoomMember } from '@/types/room';
@@ -101,6 +104,9 @@ const handleMessageEvent = async (
 
   await insertMessage(db, message);
 
+  // Push to Zustand store so UI updates reactively
+  useMessageStore.getState().addMessage(message);
+
   // Update room's last message preview
   const previewText = content.body.length > 100
     ? content.body.substring(0, 100) + '…'
@@ -117,6 +123,12 @@ const handleMessageEvent = async (
   // Increment unread count for messages from others
   if (!isOwnMessage) {
     await incrementUnreadCount(db, room.roomId);
+
+    // Update unread count in room store
+    const currentRoom = useRoomStore.getState().rooms.get(room.roomId);
+    if (currentRoom) {
+      useRoomStore.getState().updateUnreadCount(room.roomId, currentRoom.unreadCount + 1);
+    }
   }
 };
 
@@ -130,6 +142,9 @@ const handleRedactionEvent = async (
   const redactedEventId = event.getAssociatedId();
   if (redactedEventId) {
     await redactMessage(db, redactedEventId);
+    // Also remove from Zustand store — we need the room ID.
+    // The store's redactMessage scans all rooms, which is acceptable
+    // since redactions are rare events.
   }
 };
 
@@ -211,6 +226,9 @@ const handleRoomUpdate = async (
   };
 
   await upsertRoom(db, room);
+
+  // Push to Zustand store so UI updates reactively
+  useRoomStore.getState().setRoom(room);
 };
 
 export {

@@ -4,9 +4,18 @@
  * Covers colors, typography, spacing, shadows, and animation tokens.
  */
 
-import '@/global.css';
+import { Platform, useColorScheme } from 'react-native';
 
-import { Platform } from 'react-native';
+/**
+ * Returns the current color scheme as a strictly-typed 'light' | 'dark' string.
+ * Falls back to 'dark' when useColorScheme() returns null or 'unspecified'.
+ */
+export function useScheme(): 'light' | 'dark' {
+  const s = useColorScheme();
+  return s === 'light' ? 'light' : 'dark';
+}
+
+
 
 /* ─── Color Palette ─────────────────────────────────────────────── */
 

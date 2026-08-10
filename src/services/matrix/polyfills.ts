@@ -6,7 +6,7 @@
  */
 
 import { getRandomValues } from 'expo-crypto';
-import { createMMKV } from 'react-native-mmkv';
+import { MMKV } from 'react-native-mmkv';
 
 // --- TextEncoder / TextDecoder ---
 // React Native doesn't provide these globally but matrix-js-sdk needs them.
@@ -35,7 +35,7 @@ if (!globalThis.crypto.getRandomValues) {
 // --- localStorage shim via MMKV ---
 // matrix-js-sdk's MemoryStore falls back to localStorage for some operations.
 // We provide a thin shim backed by MMKV for persistence.
-const mmkv = createMMKV({ id: 'matrix-localstorage' });
+const mmkv = new MMKV({ id: 'matrix-localstorage' });
 
 const localStorageShim: Storage = {
   get length(): number {
