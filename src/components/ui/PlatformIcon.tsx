@@ -3,7 +3,8 @@
  * v1 uses text-based icons; can be swapped for SVGs in v2.
  */
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { getPlatformConfig } from '@/constants/platforms';
 import { Radius } from '@/constants/theme';
@@ -14,18 +15,18 @@ interface PlatformIconProps {
   size?: number;
 }
 
-/** Emoji icons for each platform (lightweight, no SVG dependencies) */
-const PLATFORM_EMOJI: Record<PlatformId, string> = {
-  whatsapp: '💬',
-  telegram: '✈️',
-  discord: '🎮',
-  sms: '📱',
-  matrix: '🟢',
+/** Icon names for each platform */
+const PLATFORM_ICONS: Record<PlatformId, React.ComponentProps<typeof Ionicons>['name']> = {
+  whatsapp: 'logo-whatsapp',
+  telegram: 'paper-plane',
+  discord: 'logo-discord',
+  sms: 'chatbubble',
+  matrix: 'ellipse',
 };
 
 const PlatformIcon = ({ platform, size = 24 }: PlatformIconProps) => {
   const config = getPlatformConfig(platform);
-  const emojiSize = size * 0.5;
+  const iconSize = size * 0.5;
 
   return (
     <View
@@ -39,7 +40,7 @@ const PlatformIcon = ({ platform, size = 24 }: PlatformIconProps) => {
         },
       ]}
     >
-      <Text style={{ fontSize: emojiSize }}>{PLATFORM_EMOJI[platform]}</Text>
+      <Ionicons name={PLATFORM_ICONS[platform]} size={iconSize} color="#fff" />
     </View>
   );
 };

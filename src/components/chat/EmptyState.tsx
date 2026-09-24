@@ -19,6 +19,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Colors, Typography, Spacing, Radius, Durations, useScheme } from '@/constants/theme';
 
@@ -31,7 +32,7 @@ type EmptyStateVariant =
   | 'no-messages';
 
 interface VariantConfig {
-  emoji: string;
+  iconName: React.ComponentProps<typeof Ionicons>['name'];
   title: string;
   subtitle: string;
   ctaLabel?: string;
@@ -39,24 +40,24 @@ interface VariantConfig {
 
 const VARIANT_CONFIGS: Record<EmptyStateVariant, VariantConfig> = {
   'no-conversations': {
-    emoji: '💬',
+    iconName: 'chatbubbles-outline',
     title: 'No conversations yet',
     subtitle: 'Connect a bridge to start seeing your messages from WhatsApp, Telegram, Discord, and more.',
     ctaLabel: 'Set up bridges',
   },
   'no-search-results': {
-    emoji: '🔍',
+    iconName: 'search-outline',
     title: 'No results found',
     subtitle: 'Try a different search term or check your spelling.',
   },
   'bridge-disconnected': {
-    emoji: '🔗',
+    iconName: 'link-outline',
     title: 'Bridge not connected',
     subtitle: 'This messaging platform is not yet linked. Connect it in the Bridges tab to see your conversations.',
     ctaLabel: 'Go to Bridges',
   },
   'no-messages': {
-    emoji: '👋',
+    iconName: 'hand-right-outline',
     title: 'Start the conversation',
     subtitle: 'Send the first message to get things going.',
   },
@@ -122,9 +123,9 @@ function EmptyState({
         { opacity: fadeIn, transform: [{ translateY: slideUp }] },
       ]}
     >
-      <Animated.Text style={[styles.emoji, { transform: [{ scale: emojiPulse }] }]}>
-        {config.emoji}
-      </Animated.Text>
+      <Animated.View style={[styles.emojiContainer, { transform: [{ scale: emojiPulse }] }]}>
+        <Ionicons name={config.iconName} size={56} color={C.textTertiary} />
+      </Animated.View>
 
       <Text style={[styles.title, { color: C.text }]}>{config.title}</Text>
 
@@ -155,8 +156,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.massive,
     gap: Spacing.md,
   },
-  emoji: {
-    fontSize: 56,
+  emojiContainer: {
     marginBottom: Spacing.sm,
   },
   title: {

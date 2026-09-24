@@ -10,6 +10,7 @@
 
 import React, { useCallback, useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 import { Colors, Typography, Spacing, Radius, ConversationRowHeight, useScheme } from '@/constants/theme';
@@ -107,7 +108,7 @@ function ConversationListItem({
             <View style={styles.nameRow}>
               {/* Pinned indicator */}
               {room.isPinned && (
-                <Text style={styles.pinIcon}>📌</Text>
+                <Ionicons name="pin" size={11} color={C.textTertiary} />
               )}
               <Text
                 style={[
@@ -121,7 +122,7 @@ function ConversationListItem({
               </Text>
               {/* Muted indicator */}
               {room.isMuted && (
-                <Text style={[styles.mutedIcon, { color: C.textTertiary }]}>🔇</Text>
+                <Ionicons name="volume-mute" size={12} color={C.textTertiary} style={{ marginLeft: 2 }} />
               )}
             </View>
             <Text

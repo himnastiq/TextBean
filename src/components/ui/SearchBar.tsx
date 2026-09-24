@@ -10,6 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   FadeIn,
   FadeOut,
@@ -80,7 +81,7 @@ const SearchBar = ({
         ]}
       >
         {/* Search icon */}
-        <Text style={[styles.icon, { color: theme.textTertiary }]}>🔍</Text>
+        <Ionicons name="search-outline" size={16} color={theme.textTertiary} style={styles.icon} />
 
         <TextInput
           ref={inputRef}

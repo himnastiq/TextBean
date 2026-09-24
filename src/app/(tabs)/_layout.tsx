@@ -7,6 +7,7 @@
 
 import { Tabs } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Colors, Typography, Spacing, useScheme } from '@/constants/theme';
@@ -15,12 +16,12 @@ import { useRoomStore, selectTotalUnreadCount } from '@/stores/room-store';
 /* ─── Tab Icon component ─────────────────────────────────── */
 
 function TabIcon({
-  emoji,
+  iconName,
   label,
   focused,
   badge,
 }: {
-  emoji: string;
+  iconName: React.ComponentProps<typeof Ionicons>['name'];
   label: string;
   focused: boolean;
   badge?: number;
@@ -31,7 +32,12 @@ function TabIcon({
   return (
     <View style={styles.tabItem}>
       <View style={styles.iconWrapper}>
-        <Text style={[styles.emoji, focused && styles.emojiActive]}>{emoji}</Text>
+        <Ionicons
+          name={iconName}
+          size={24}
+          color={focused ? C.accent : C.textSecondary}
+          style={{ opacity: focused ? 1 : 0.55 }}
+        />
         {badge !== undefined && badge > 0 ? (
           <View style={styles.tabBadge}>
             <Text style={styles.tabBadgeText}>{badge > 99 ? '99+' : String(badge)}</Text>
@@ -77,7 +83,7 @@ export default function TabsLayout() {
         options={{
           title: 'Chats',
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="💬" label="Chats" focused={focused} badge={totalUnread} />
+            <TabIcon iconName="chatbubbles" label="Chats" focused={focused} badge={totalUnread} />
           ),
         }}
       />
@@ -86,7 +92,7 @@ export default function TabsLayout() {
         options={{
           title: 'Search',
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="🔍" label="Search" focused={focused} />
+            <TabIcon iconName="search" label="Search" focused={focused} />
           ),
         }}
       />
@@ -95,7 +101,7 @@ export default function TabsLayout() {
         options={{
           title: 'Bridges',
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="🔗" label="Bridges" focused={focused} />
+            <TabIcon iconName="link" label="Bridges" focused={focused} />
           ),
         }}
       />
@@ -104,7 +110,7 @@ export default function TabsLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="⚙️" label="Settings" focused={focused} />
+            <TabIcon iconName="settings-outline" label="Settings" focused={focused} />
           ),
         }}
       />

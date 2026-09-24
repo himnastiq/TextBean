@@ -19,6 +19,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useColorScheme } from 'react-native';
@@ -99,7 +100,7 @@ function RecentChip({ query, onPress, onRemove }: { query: string; onPress: () =
   return (
     <View style={[styles.recentChip, { backgroundColor: C.backgroundElement }]}>
       <Pressable onPress={onPress} style={styles.recentChipLabel}>
-        <Text style={[styles.recentChipText, { color: C.text }]}>🔍 {query}</Text>
+        <Text style={[styles.recentChipText, { color: C.text }]}><Ionicons name="search-outline" size={12} color={C.textSecondary} /> {query}</Text>
       </Pressable>
       <Pressable onPress={onRemove} hitSlop={8} style={styles.recentChipRemove}>
         <Text style={{ color: C.textTertiary, fontSize: 12 }}>✕</Text>
@@ -176,7 +177,7 @@ export default function SearchPage() {
 
         {/* Search input */}
         <View style={[styles.searchBar, { backgroundColor: C.backgroundElement }]}>
-          <Text style={styles.searchIcon}>🔍</Text>
+          <Ionicons name="search-outline" size={18} color={C.textTertiary} />
           <TextInput
             id="search-input"
             ref={inputRef}
@@ -223,7 +224,7 @@ export default function SearchPage() {
 
           {!isSearching && !hasResults && localQuery.trim().length > 1 && (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyEmoji}>🔍</Text>
+              <Ionicons name="search-outline" size={48} color={C.textTertiary} style={{ marginBottom: Spacing.lg }} />
               <Text style={[styles.emptyTitle, { color: C.text }]}>No results found</Text>
               <Text style={[styles.emptySubtitle, { color: C.textSecondary }]}>
                 Try a different search term
@@ -260,7 +261,7 @@ export default function SearchPage() {
       {/* Initial state */}
       {!showResults && !showRecent && (
         <View style={styles.initialState}>
-          <Text style={styles.initialEmoji}>💬</Text>
+          <Ionicons name="chatbubbles-outline" size={48} color={C.textTertiary} style={{ opacity: 0.4 }} />
           <Text style={[styles.initialText, { color: C.textSecondary }]}>
             Search across all your conversations
           </Text>

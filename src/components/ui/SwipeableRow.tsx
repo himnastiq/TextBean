@@ -5,7 +5,8 @@
  */
 
 import type { ReactNode } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -91,13 +92,10 @@ const SwipeableRow = ({
               key={action.label}
               style={[styles.action, { backgroundColor: action.color }]}
             >
-              <Text
-                style={styles.actionIcon}
-                onPress={() => runOnJS(handleAction)(action)}
-              >
-                {action.icon}
-              </Text>
-              <Text style={styles.actionLabel}>{action.label}</Text>
+              <Pressable onPress={() => runOnJS(handleAction)(action)} style={styles.actionTouchable}>
+                <Ionicons name={action.icon as React.ComponentProps<typeof Ionicons>['name']} size={20} color="#fff" />
+                <Text style={styles.actionLabel}>{action.label}</Text>
+              </Pressable>
             </Animated.View>
           ))}
         </View>
@@ -111,13 +109,10 @@ const SwipeableRow = ({
               key={action.label}
               style={[styles.action, { backgroundColor: action.color }]}
             >
-              <Text
-                style={styles.actionIcon}
-                onPress={() => runOnJS(handleAction)(action)}
-              >
-                {action.icon}
-              </Text>
-              <Text style={styles.actionLabel}>{action.label}</Text>
+              <Pressable onPress={() => runOnJS(handleAction)(action)} style={styles.actionTouchable}>
+                <Ionicons name={action.icon as React.ComponentProps<typeof Ionicons>['name']} size={20} color="#fff" />
+                <Text style={styles.actionLabel}>{action.label}</Text>
+              </Pressable>
             </Animated.View>
           ))}
         </View>
@@ -160,8 +155,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: Spacing.xxs,
   },
-  actionIcon: {
-    fontSize: 20,
+  actionTouchable: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    width: '100%',
+    gap: Spacing.xxs,
   },
   actionLabel: {
     color: '#FFFFFF',

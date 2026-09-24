@@ -26,6 +26,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useColorScheme } from 'react-native';
@@ -131,12 +132,12 @@ function MessageBubble({ message, isSent, isGrouped, onLongPress }: MessageBubbl
 
   const bubbleBg = isSent ? C.bubbleSent : C.bubbleReceived;
   const textColor = isSent ? C.bubbleSentText : C.bubbleReceivedText;
-  const deliveryIcon =
-    message.deliveryStatus === 'sending' ? '⏳'
-    : message.deliveryStatus === 'failed' ? '⚠️'
-    : message.deliveryStatus === 'read' ? '✓✓'
-    : message.deliveryStatus === 'delivered' ? '✓✓'
-    : '✓';
+  const deliveryIconName: React.ComponentProps<typeof Ionicons>['name'] =
+    message.deliveryStatus === 'sending' ? 'time-outline'
+    : message.deliveryStatus === 'failed' ? 'alert-circle'
+    : message.deliveryStatus === 'read' ? 'checkmark-done'
+    : message.deliveryStatus === 'delivered' ? 'checkmark-done'
+    : 'checkmark';
 
   return (
     <Animated.View style={[styles.messageRow, isSent ? styles.messageRowSent : styles.messageRowReceived, { opacity: fadeAnim }]}>
@@ -179,7 +180,7 @@ function MessageBubble({ message, isSent, isGrouped, onLongPress }: MessageBubbl
             {message.isEdited ? ' · edited' : ''}
           </Text>
           {isSent && (
-            <Text style={[styles.deliveryStatus, { color: textColor + 'AA' }]}>{deliveryIcon}</Text>
+            <Ionicons name={deliveryIconName} size={10} color={textColor + 'AA'} />
           )}
         </View>
       </Pressable>
@@ -246,12 +247,12 @@ function ContextMenu({
         style={[styles.contextMenu, { backgroundColor: C.backgroundElevated, transform: [{ scale: scaleAnim }] }]}
       >
         <Pressable id="context-reply" style={styles.contextItem} onPress={onReply}>
-          <Text style={styles.contextIcon}>↩️</Text>
+          <Ionicons name="arrow-undo-outline" size={20} color={C.text} />
           <Text style={[styles.contextLabel, { color: C.text }]}>Reply</Text>
         </Pressable>
         <View style={[styles.contextDivider, { backgroundColor: C.border }]} />
         <Pressable id="context-copy" style={styles.contextItem} onPress={onCopy}>
-          <Text style={styles.contextIcon}>📋</Text>
+          <Ionicons name="copy-outline" size={20} color={C.text} />
           <Text style={[styles.contextLabel, { color: C.text }]}>Copy</Text>
         </Pressable>
       </Animated.View>
@@ -442,7 +443,7 @@ export default function ChatPage() {
           onPress={handleSend}
           disabled={!inputText.trim()}
         >
-          <Text style={styles.sendIcon}>↑</Text>
+          <Ionicons name="arrow-up" size={18} color="#fff" />
         </Pressable>
       </View>
 

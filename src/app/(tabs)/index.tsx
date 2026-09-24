@@ -19,6 +19,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
@@ -85,7 +86,7 @@ function ConversationRow({ room }: { room: Room }) {
       leftActions={[
         {
           label: room.isPinned ? 'Unpin' : 'Pin',
-          icon: '📌',
+          icon: 'pin',
           color: '#FFB800',
           onPress: () => togglePin(db, room.roomId),
         },
@@ -93,13 +94,13 @@ function ConversationRow({ room }: { room: Room }) {
       rightActions={[
         {
           label: room.isMuted ? 'Unmute' : 'Mute',
-          icon: '🔇',
+          icon: 'volume-mute',
           color: '#8B98A5',
           onPress: () => toggleMute(db, room.roomId),
         },
         {
           label: 'Archive',
-          icon: '📁',
+          icon: 'archive-outline',
           color: '#536471',
           onPress: () => archiveRoom(db, room.roomId),
         },
@@ -127,8 +128,8 @@ function ConversationRow({ room }: { room: Room }) {
         <View style={styles.rowContent}>
           <View style={styles.rowTopLine}>
             <View style={styles.rowNameRow}>
-              {room.isPinned ? <Text style={styles.pinIcon}>📌 </Text> : null}
-              {room.isMuted ? <Text style={styles.muteIcon}>🔇 </Text> : null}
+              {room.isPinned ? <Ionicons name="pin" size={11} color={C.textTertiary} style={{ marginRight: 2 }} /> : null}
+              {room.isMuted ? <Ionicons name="volume-mute" size={11} color={C.textTertiary} style={{ marginRight: 2 }} /> : null}
               <Text
                 style={[styles.roomName, { color: C.text, fontWeight: room.unreadCount > 0 ? '700' : '500' }]}
                 numberOfLines={1}
@@ -184,7 +185,7 @@ function EmptyChats({ platformFilter }: { platformFilter: string }) {
 
   return (
     <View style={styles.emptyState}>
-      <Text style={styles.emptyEmoji}>{platformFilter === 'all' ? '💬' : '🔗'}</Text>
+      <Ionicons name={platformFilter === 'all' ? 'chatbubbles-outline' : 'link-outline'} size={56} color={C.textTertiary} style={{ marginBottom: Spacing.lg }} />
       <Text style={[styles.emptyTitle, { color: C.text }]}>
         {platformFilter === 'all' ? 'No conversations yet' : `No ${PLATFORM_CONFIGS[platformFilter as PlatformId]?.displayName ?? ''} chats`}
       </Text>
@@ -326,7 +327,7 @@ export default function ChatsPage() {
           // TODO: open room picker — Phase 6
         }}
       >
-        <Text style={styles.fabIcon}>✏️</Text>
+        <Ionicons name="create-outline" size={22} color="#fff" />
       </Pressable>
     </View>
   );

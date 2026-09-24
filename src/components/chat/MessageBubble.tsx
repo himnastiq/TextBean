@@ -11,6 +11,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 
 import { Colors, Typography, Spacing, Radius, Durations, useScheme } from '@/constants/theme';
@@ -21,14 +22,14 @@ import type { Message } from '@/types/message';
 
 /* ─── Delivery status icon ───────────────────────────────── */
 
-function deliveryIcon(status: Message['deliveryStatus']): string {
+function DeliveryIcon({ status, color }: { status: Message['deliveryStatus']; color: string }) {
   switch (status) {
-    case 'sending': return '⏳';
-    case 'failed': return '⚠️';
-    case 'read': return '✓✓';
-    case 'delivered': return '✓✓';
+    case 'sending': return <Ionicons name="time-outline" size={10} color={color} />;
+    case 'failed': return <Ionicons name="alert-circle" size={10} color={color} />;
+    case 'read': return <Ionicons name="checkmark-done" size={10} color={color} />;
+    case 'delivered': return <Ionicons name="checkmark-done" size={10} color={color} />;
     case 'sent':
-    default: return '✓';
+    default: return <Ionicons name="checkmark" size={10} color={color} />;
   }
 }
 
@@ -148,7 +149,10 @@ function MessageBubble({
 
         {/* Message content */}
         {message.isRedacted ? (
-          <Text style={[styles.redactedText, { color: metaColor }]}>🚫 This message was deleted</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Ionicons name="ban-outline" size={14} color={metaColor} />
+            <Text style={[styles.redactedText, { color: metaColor }]}>This message was deleted</Text>
+          </View>
         ) : (
           <Text style={[styles.messageText, { color: textColor }]}>
             {textSegments.map((seg, i) =>
@@ -170,14 +174,10 @@ function MessageBubble({
             {message.isEdited ? ' · edited' : ''}
           </Text>
           {isSent && (
-            <Text
-              style={[
-                styles.deliveryIcon,
-                { color: message.deliveryStatus === 'read' ? '#4FC3F7' : metaColor },
-              ]}
-            >
-              {deliveryIcon(message.deliveryStatus)}
-            </Text>
+            <DeliveryIcon
+              status={message.deliveryStatus}
+              color={message.deliveryStatus === 'read' ? '#4FC3F7' : metaColor}
+            />
           )}
         </View>
       </Pressable>

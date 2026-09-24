@@ -19,6 +19,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
 
@@ -39,7 +40,7 @@ function SettingRow({
   destructive,
 }: {
   id: string;
-  icon: string;
+  icon: React.ComponentProps<typeof Ionicons>['name'];
   label: string;
   sublabel?: string;
   onPress?: () => void;
@@ -57,13 +58,13 @@ function SettingRow({
       disabled={!onPress && !trailing}
     >
       <View style={[styles.settingIconWrapper, { backgroundColor: destructive ? '#F4212E22' : C.backgroundElement }]}>
-        <Text style={styles.settingIcon}>{icon}</Text>
+        <Ionicons name={icon} size={18} color={destructive ? C.error : C.accent} />
       </View>
       <View style={styles.settingContent}>
         <Text style={[styles.settingLabel, { color: destructive ? C.error : C.text }]}>{label}</Text>
         {sublabel ? <Text style={[styles.settingSubLabel, { color: C.textSecondary }]}>{sublabel}</Text> : null}
       </View>
-      {trailing ?? (onPress ? <Text style={[styles.settingChevron, { color: C.textTertiary }]}>›</Text> : null)}
+      {trailing ?? (onPress ? <Ionicons name="chevron-forward" size={18} color={C.textTertiary} /> : null)}
     </Pressable>
   );
 }
@@ -150,7 +151,7 @@ export default function SettingsPage() {
           <View style={[styles.divider, { backgroundColor: C.border }]} />
           <SettingRow
             id="settings-logout"
-            icon="🚪"
+            icon="log-out-outline"
             label="Sign Out"
             onPress={handleLogout}
             destructive
@@ -162,7 +163,7 @@ export default function SettingsPage() {
         <SectionCard>
           <SettingRow
             id="settings-notif-toggle"
-            icon="🔔"
+            icon="notifications-outline"
             label="Notifications"
             sublabel="Receive message alerts"
             trailing={
@@ -177,7 +178,7 @@ export default function SettingsPage() {
           <View style={[styles.divider, { backgroundColor: C.border }]} />
           <SettingRow
             id="settings-sound-toggle"
-            icon="🔊"
+            icon="volume-high-outline"
             label="Sound"
             trailing={
               <Switch
@@ -192,7 +193,7 @@ export default function SettingsPage() {
           <View style={[styles.divider, { backgroundColor: C.border }]} />
           <SettingRow
             id="settings-vibration-toggle"
-            icon="📳"
+            icon="phone-portrait-outline"
             label="Vibration"
             trailing={
               <Switch
@@ -211,7 +212,7 @@ export default function SettingsPage() {
         <SectionCard>
           <SettingRow
             id="settings-theme"
-            icon="🎨"
+            icon="color-palette-outline"
             label="Theme"
             sublabel={scheme === 'dark' ? 'Dark (System)' : 'Light (System)'}
             trailing={<Text style={[styles.settingValue, { color: C.textSecondary }]}>System</Text>}
@@ -223,7 +224,7 @@ export default function SettingsPage() {
         <SectionCard>
           <SettingRow
             id="settings-cache"
-            icon="🗑"
+            icon="trash-outline"
             label="Clear Message Cache"
             sublabel="Removes cached messages from local storage"
             onPress={() => {
@@ -240,21 +241,21 @@ export default function SettingsPage() {
         <SectionCard>
           <SettingRow
             id="settings-version"
-            icon="📦"
+            icon="cube-outline"
             label="Version"
             trailing={<Text style={[styles.settingValue, { color: C.textTertiary }]}>{appVersion}</Text>}
           />
           <View style={[styles.divider, { backgroundColor: C.border }]} />
           <SettingRow
             id="settings-matrix-protocol"
-            icon="🌐"
+            icon="globe-outline"
             label="Matrix Protocol"
             trailing={<Text style={[styles.settingValue, { color: C.textTertiary }]}>v1.x</Text>}
           />
           <View style={[styles.divider, { backgroundColor: C.border }]} />
           <SettingRow
             id="settings-oss"
-            icon="📄"
+            icon="document-text-outline"
             label="Open Source Licenses"
             onPress={() => {}}
           />

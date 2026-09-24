@@ -18,6 +18,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColorScheme } from 'react-native';
 
@@ -56,7 +57,7 @@ function FeatureBadge({ label, supported }: { label: string; supported: boolean 
         },
       ]}
     >
-      <Text style={{ fontSize: 10, marginRight: 3 }}>{supported ? '✅' : '—'}</Text>
+      <Ionicons name={supported ? 'checkmark-circle' : 'remove-outline'} size={12} color={supported ? Colors.dark.success : C.textTertiary} style={{ marginRight: 3 }} />
       <Text style={[styles.featureBadgeText, { color: supported ? Colors.dark.success : C.textTertiary }]}>
         {label}
       </Text>
@@ -151,7 +152,7 @@ function BridgeCard({ platformId, config, status, onConnect, onDisconnect }: Bri
 
         {/* Icon placeholder */}
         <View style={[styles.platformIcon, { backgroundColor: platformColor + '22', borderColor: platformColor + '44' }]}>
-          <Text style={styles.platformIconText}>{platformEmoji(platformId)}</Text>
+          <Ionicons name={platformIconName(platformId)} size={24} color={platformColor} />
         </View>
 
         {/* Info */}
@@ -266,7 +267,7 @@ export default function BridgesPage() {
       >
         {/* Info banner */}
         <View style={[styles.infoBanner, { backgroundColor: C.accentLight, borderColor: C.accent + '40' }]}>
-          <Text style={styles.infoEmoji}>ℹ️</Text>
+          <Ionicons name="information-circle-outline" size={18} color={C.accent} style={{ marginTop: 1 }} />
           <Text style={[styles.infoText, { color: C.accent }]}>
             Bridges require a self-hosted Matrix homeserver with mautrix bridges configured.
           </Text>
@@ -295,13 +296,13 @@ export default function BridgesPage() {
 
 /* ─── Helpers ────────────────────────────────────────────── */
 
-function platformEmoji(id: PlatformId): string {
+function platformIconName(id: PlatformId): React.ComponentProps<typeof Ionicons>['name'] {
   switch (id) {
-    case 'whatsapp': return '📱';
-    case 'telegram': return '✈️';
-    case 'discord': return '🎮';
-    case 'sms': return '💬';
-    default: return '🔗';
+    case 'whatsapp': return 'logo-whatsapp';
+    case 'telegram': return 'paper-plane';
+    case 'discord': return 'logo-discord';
+    case 'sms': return 'chatbubble';
+    default: return 'link';
   }
 }
 

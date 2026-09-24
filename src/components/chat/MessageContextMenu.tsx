@@ -15,6 +15,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 
 import { Colors, Typography, Spacing, Radius, useScheme } from '@/constants/theme';
@@ -24,7 +25,7 @@ import type { Message } from '@/types/message';
 
 interface ContextAction {
   id: string;
-  icon: string;
+  icon: React.ComponentProps<typeof Ionicons>['name'];
   label: string;
   destructive?: boolean;
   onPress: () => void;
@@ -99,15 +100,15 @@ function MessageContextMenu({
   if (!visible || !message) return null;
 
   const actions: ContextAction[] = [
-    { id: 'reply', icon: '↩️', label: 'Reply', onPress: onReply },
-    { id: 'copy', icon: '📋', label: 'Copy', onPress: onCopy },
+    { id: 'reply', icon: 'arrow-undo-outline', label: 'Reply', onPress: onReply },
+    { id: 'copy', icon: 'copy-outline', label: 'Copy', onPress: onCopy },
   ];
 
   if (onForward) {
-    actions.push({ id: 'forward', icon: '↗️', label: 'Forward', onPress: onForward });
+    actions.push({ id: 'forward', icon: 'arrow-redo-outline', label: 'Forward', onPress: onForward });
   }
   if (onDelete) {
-    actions.push({ id: 'delete', icon: '🗑️', label: 'Delete', destructive: true, onPress: onDelete });
+    actions.push({ id: 'delete', icon: 'trash-outline', label: 'Delete', destructive: true, onPress: onDelete });
   }
 
   const handleAction = (action: ContextAction) => {
@@ -153,7 +154,7 @@ function MessageContextMenu({
               ]}
               onPress={() => handleAction(action)}
             >
-              <Text style={styles.actionIcon}>{action.icon}</Text>
+              <Ionicons name={action.icon} size={20} color={action.destructive ? C.error : C.text} />
               <Text
                 style={[
                   styles.actionLabel,
