@@ -1,0 +1,70 @@
+name: Build APK & Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build APK & Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup EAS CLI
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build APK
+        run: eas build --platform android --profile preview --non-interactive --wait
+
+      - name: Download APK
+        run: |
+          # Get the latest build URL from EAS
+          BUILD_URL=$(eas build:list --platform android --status finished --limit 1 --non-interactive --json | jq -r '.[0].artifacts.buildUrl')
+          echo "Downloading APK from: $BUILD_URL"
+          curl -L -o TextBean.apk "$BUILD_URL"
+
+      - name: Get version info
+        id: version
+        run: |
+          APP_VERSION=$(jq -r '.expo.version' app.json)
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          TAG="v${APP_VERSION}-${SHORT_SHA}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "app_version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "TextBean ${{ steps.version.outputs.tag }}"
+          body: |
+            ## TextBean ${{ steps.version.outputs.app_version }}
+
+            **Commit:** [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            **Branch:** `${{ github.ref_name }}`
+            **Built with:** EAS Build (Expo SDK 56)
+
+            ### Installation
+            1. Download `TextBean.apk` below
+            2. Transfer to your Android device
+            3. Open the APK and install (enable "Install from unknown sources" if prompted)
+          files: TextBean.apk
+          generate_release_notes: true
